@@ -1,14 +1,16 @@
 package org.example;
 
+import java.nio.channels.ScatteringByteChannel;
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class App {
 
     public static void main(String[] args) {
-        int gameOn = 0;
-        int menuSelected = 0;
-        while (gameOn == 0) {
+        boolean gameOn = true;
+        String menuSelected;
+        while (gameOn) {
             String[] menu = {
                     "Elpriser\n",
                     "========\n",
@@ -21,29 +23,45 @@ public class App {
                 System.out.print(menuOption);
             }
             Scanner scanner = new Scanner(System.in);
-            menuSelected = scanner.nextInt();
+            menuSelected = scanner.nextLine();
 
-//
-//            else if (scanner.nextLine().equalsIgnoreCase("e")) {
-//                menuSelected = 5;
-//            }
             switch (menuSelected) {
-                case 1:
-                    System.out.println("Inmatning");
+                case "1":
+                    Inmatning();
                     break;
-                case 2:
+                case "2":
                     System.out.println("Min, Max och Medel");
                     break;
-                case 3:
+                case "3":
                     System.out.println("Sortera");
                     break;
-                case 4:
+                case "4":
                     System.out.println("Bästa Laddningstid (4h) ");
                     break;
-                case 5:
-                    gameOn = 1;
+                case "e", "E":
+                    gameOn = false;
                     break;
             }
         }
+    }
+    public static void Inmatning(){
+        Random rand = new Random();
+    int[] anArray = new int[24];
+    for (int i = 0; i < 9; i++) {
+        anArray[i] = rand.nextInt(1,600); ;
+        System.out.println("0" + i + "-" + "0" + (i+1) + "-" + anArray[i]);
+
+    }
+    System.out.println("09" + ":" + "10");
+    for (int i = 10; i < 19; i++) {
+        anArray[i] = rand.nextInt(1,600);
+        System.out.println(i + "-" + (i+1) + ":" + anArray[i]);
+    }
+    System.out.println("19" + "-" + "20");
+    for (int i = 20; i < 24; i++) {
+        anArray[i] = rand.nextInt(1,600);
+        System.out.println(i + "-" + (i+1) + ":" + anArray[i]);
+    }
+
     }
 }
