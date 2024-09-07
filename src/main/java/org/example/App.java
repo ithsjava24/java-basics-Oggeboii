@@ -1,67 +1,109 @@
 package org.example;
 
-import java.nio.channels.ScatteringByteChannel;
-import java.util.InputMismatchException;
-import java.util.Random;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class App {
 
-    public static void main(String[] args) {
-        boolean gameOn = true;
-        String menuSelected;
-        while (gameOn) {
-            String[] menu = {
-                    "Elpriser\n",
-                    "========\n",
-                    "1. Inmatning\n",
-                    "2. Min, Max och Medel\n",
-                    "3. Sortera\n",
-                    "4. Bästa Laddningstid (4h)\n",
-                    "e. Avsluta\n"};
-            for (String menuOption : menu) {
-                System.out.print(menuOption);
-            }
-            Scanner scanner = new Scanner(System.in);
-            menuSelected = scanner.nextLine();
+    static int[] inData = new int[24];
 
-            switch (menuSelected) {
-                case "1":
-                    Inmatning();
-                    break;
-                case "2":
-                    System.out.println("Min, Max och Medel");
-                    break;
-                case "3":
-                    System.out.println("Sortera");
-                    break;
-                case "4":
-                    System.out.println("Bästa Laddningstid (4h) ");
-                    break;
-                case "e", "E":
-                    gameOn = false;
-                    break;
+
+        public static void main (String[]args){
+            boolean gameOn = true;
+            String menuSelected;
+            while (gameOn) {
+                String[] menu = {
+                        "Elpriser\n",
+                        "========\n",
+                        "1. Inmatning\n",
+                        "2. Min, Max och Medel\n",
+                        "3. Sortera\n",
+                        "4. Bästa Laddningstid (4h)\n",
+                        "e. Avsluta\n"};
+                for (String menuOption : menu) {
+                    System.out.print(menuOption);
+                }
+                Scanner scanner = new Scanner(System.in);
+                menuSelected = scanner.nextLine();
+
+                switch (menuSelected) {
+                    case "1":
+                        Inmatning();
+                        break;
+                    case "2":
+                        minMaxMiddle();
+                        break;
+                    case "3":
+                        System.out.print("Sortera\n");
+                        break;
+                    case "4":
+                        System.out.print("Bästa Laddningstid (4h)\n");
+                        break;
+                    case "e", "E":
+                        gameOn = false;
+                        break;
+                }
             }
         }
-    }
-    public static void Inmatning(){
-        Random rand = new Random();
-    int[] anArray = new int[24];
-    for (int i = 0; i < 9; i++) {
-        anArray[i] = rand.nextInt(1,600); ;
-        System.out.println("0" + i + "-" + "0" + (i+1) + "-" + anArray[i]);
 
-    }
-    System.out.println("09" + ":" + "10");
-    for (int i = 10; i < 19; i++) {
-        anArray[i] = rand.nextInt(1,600);
-        System.out.println(i + "-" + (i+1) + ":" + anArray[i]);
-    }
-    System.out.println("19" + "-" + "20");
-    for (int i = 20; i < 24; i++) {
-        anArray[i] = rand.nextInt(1,600);
-        System.out.println(i + "-" + (i+1) + ":" + anArray[i]);
+        public static void Inmatning() {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Skriv in öre/kWh tack:\n");
+            for (int i = 0; i < inData.length; i++) {
+                    try {
+                        inData[i] = Integer.parseInt(scanner.nextLine());
+
+                    } catch (NumberFormatException e) {
+                        System.out.print("Skriv in öre/kWh tack: \n");
+                    }
+
+            }
+        }
+
+        public static void minMaxMiddle() {
+            int[] minMaxValueArray = inData;
+            int sum = 0;
+            float middle =0f;
+            int maxValue = 0;
+            int maxValuePosition = 0;
+            int minValuePosition = 0;
+            int minValue = Integer.MAX_VALUE;
+            for (int i = 0; i <minMaxValueArray.length; i++) {
+                if (minMaxValueArray[i] > maxValue) {
+                    maxValue = minMaxValueArray[i];
+                    maxValuePosition = i;
+                }
+                if (minMaxValueArray[i] < minValue) {
+                    minValue = minMaxValueArray[i];
+                    minValuePosition = i;
+                }
+                sum = minMaxValueArray[i] + sum;
+            }
+            middle = ((float) sum /minMaxValueArray.length);
+            System.out.print("Lägsta pris: ");
+            if (minValuePosition < 9){
+                System.out.print("Lägsta pris: " + "0" + minValuePosition + "-" + "0" + (minValuePosition + 1)  + ", " + minValue + " öre/kWh\n");
+            }
+            else if (minValuePosition ==9 ){
+                System.out.print("Lägsta pris: " + "0" + minValuePosition + "-" + (minValuePosition+1) + ", " + minValue + " öre/kWh\n");
+            }
+            else{
+                System.out.print("Lägsta pris: " + minValuePosition + "-" + (minValuePosition + 1) + ", " + minValue + " öre/kWh\n");
+            }
+
+            System.out.print("Högsta pris: ");
+            if (maxValuePosition < 9){
+                System.out.print("Högsta pris: " + "0" + maxValuePosition + "-" + "0" + (maxValuePosition + 1) + ", " + maxValue + " öre/kWh\n");
+            }
+            else if (maxValuePosition ==9 ){
+                System.out.print("Högsta pris: " + "0" + maxValuePosition + "-" + (maxValuePosition+1) + ", " + maxValue + " öre/kWh\n");
+            }
+            else{
+                System.out.print("Högsta pris: " + maxValuePosition + "-" + (maxValuePosition + 1) + ", " + maxValue + " öre/kWh\n");
+            }
+            System.out.print("Medelpris: " + middle + " öre/kWh\n");
+
+        }
     }
 
-    }
-}
+
