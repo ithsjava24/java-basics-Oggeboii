@@ -1,14 +1,22 @@
 package org.example;
 
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 
-    static int[] inData = new int[24];
+    public Scanner scanner;
+    public int[] inData;
 
 
-        public static void main (String[]args){
+        public static void main (String[]args) {
+            App app = new App();
+            app.run();
+        }
+        public App(){
+            this.scanner = new Scanner(System.in);
+            this.inData = new int[24];
+        }
+        public void run () {
             boolean gameOn = true;
             String menuSelected;
             while (gameOn) {
@@ -23,10 +31,8 @@ public class App {
                 for (String menuOption : menu) {
                     System.out.print(menuOption);
                 }
-                Scanner scanner = new Scanner(System.in);
                 menuSelected = scanner.nextLine();
-
-                switch (menuSelected) {
+                switch (menuSelected.toLowerCase()) {
                     case "1":
                         Inmatning();
                         break;
@@ -34,76 +40,98 @@ public class App {
                         minMaxMiddle();
                         break;
                     case "3":
-                        System.out.print("Sortera\n");
+                        sort();
                         break;
                     case "4":
-                        System.out.print("Bästa Laddningstid (4h)\n");
+                        cheapest();
                         break;
-                    case "e", "E":
+                    case "e":
                         gameOn = false;
                         break;
                 }
             }
         }
-
-        public static void Inmatning() {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Skriv in öre/kWh tack:\n");
+        public void Inmatning() {
             for (int i = 0; i < inData.length; i++) {
-                    try {
-                        inData[i] = Integer.parseInt(scanner.nextLine());
+                try {
+                    inData[i] = Integer.parseInt(scanner.nextLine());
 
-                    } catch (NumberFormatException e) {
-                        System.out.print("Skriv in öre/kWh tack: \n");
-                    }
-
+                } catch (NumberFormatException e) {
+                    System.out.print("Skriv in öre/kWh tack: \n");
+                    i--;
+                }
             }
         }
-
-        public static void minMaxMiddle() {
-            int[] minMaxValueArray = inData;
+        public void minMaxMiddle() {
+            int[] minMaxPriceArray = inData;
             int sum = 0;
-            float middle =0f;
-            int maxValue = 0;
-            int maxValuePosition = 0;
-            int minValuePosition = 0;
-            int minValue = Integer.MAX_VALUE;
-            for (int i = 0; i <minMaxValueArray.length; i++) {
-                if (minMaxValueArray[i] > maxValue) {
-                    maxValue = minMaxValueArray[i];
-                    maxValuePosition = i;
+            float avaragePrice =0f;
+            int highestPrice = 0;
+            int highestPricePosition = 0;
+            int lowestPricePosition = 0;
+            int lowestPrice = Integer.MAX_VALUE;
+            for (int i = 0; i <minMaxPriceArray.length; i++) {
+                if (minMaxPriceArray[i] > highestPrice) {
+                    highestPrice = minMaxPriceArray[i];
+                    highestPricePosition = i;
                 }
-                if (minMaxValueArray[i] < minValue) {
-                    minValue = minMaxValueArray[i];
-                    minValuePosition = i;
+                if (minMaxPriceArray[i] < lowestPrice) {
+                    lowestPrice = minMaxPriceArray[i];
+                    lowestPricePosition = i;
                 }
-                sum = minMaxValueArray[i] + sum;
+                sum = minMaxPriceArray[i] + sum;
             }
-            middle = ((float) sum /minMaxValueArray.length);
-            System.out.print("Lägsta pris: ");
-            if (minValuePosition < 9){
-                System.out.print("Lägsta pris: " + "0" + minValuePosition + "-" + "0" + (minValuePosition + 1)  + ", " + minValue + " öre/kWh\n");
-            }
-            else if (minValuePosition ==9 ){
-                System.out.print("Lägsta pris: " + "0" + minValuePosition + "-" + (minValuePosition+1) + ", " + minValue + " öre/kWh\n");
-            }
-            else{
-                System.out.print("Lägsta pris: " + minValuePosition + "-" + (minValuePosition + 1) + ", " + minValue + " öre/kWh\n");
-            }
-
-            System.out.print("Högsta pris: ");
-            if (maxValuePosition < 9){
-                System.out.print("Högsta pris: " + "0" + maxValuePosition + "-" + "0" + (maxValuePosition + 1) + ", " + maxValue + " öre/kWh\n");
-            }
-            else if (maxValuePosition ==9 ){
-                System.out.print("Högsta pris: " + "0" + maxValuePosition + "-" + (maxValuePosition+1) + ", " + maxValue + " öre/kWh\n");
-            }
-            else{
-                System.out.print("Högsta pris: " + maxValuePosition + "-" + (maxValuePosition + 1) + ", " + maxValue + " öre/kWh\n");
-            }
-            System.out.print("Medelpris: " + middle + " öre/kWh\n");
-
+            avaragePrice = ((float) sum /minMaxPriceArray.length);
+            //prinf(%02d -%02d,
+            System.out.printf("Lägsta pris: %02d-%02d, %d öre/kWh\n" , lowestPricePosition, (lowestPricePosition + 1), lowestPrice);
+            System.out.printf("Högsta pris: %02d-%02d, %d öre/kWh\n" , highestPricePosition, (highestPricePosition+1), highestPrice);
+            System.out.printf("Medelpris: " + "%.2f öre/kWh\n", avaragePrice);
         }
+        public void sort(){
+            int[] sortArray  = new int[inData.length];
+            for (int i = 0; i < inData.length; i++) {
+                sortArray[i] = inData[i];
+            }
+            int[]positionArray = new int[24];
+            for (int i = 0; i < 24; i++) {
+                positionArray[i] = i;
+            }
+            int tempValue;
+            int tempPosition;
+            boolean swapped;
+            for (int i = 0; i < sortArray.length-1; i++) {
+                swapped = false;
+                for (int j = 0; j < sortArray.length-1; j++) {
+                    if (sortArray[j] < sortArray[j+1]) {
+                        tempValue = sortArray[j];
+                        sortArray[j] = sortArray[j+1];
+                        sortArray[j+1] = tempValue;
+                        tempPosition = positionArray[j];
+                        positionArray[j] = positionArray[j+1];
+                        positionArray[j+1] = tempPosition;
+                        swapped = true;
+                    }
+                }
+                if (!swapped) {break;}
+            }
+            for (int i = 0; i <inData.length ; i++) {
+                System.out.printf("%02d-%02d %d öre\n" , positionArray[i], (positionArray[i] + 1), sortArray[i]);
+            }
+        }
+        public void cheapest(){
+            float cheapestFour = Integer.MAX_VALUE;
+            int cheapestFirst = 0;
+            for (int i = 0; i < inData.length-4; i++) {
+                if (cheapestFour > inData[i] + inData[i+1] + inData[i+2] + inData[i+3]){
+                    cheapestFour = inData[i] + inData[i+1] + inData[i+2] + inData[i+3];
+                    cheapestFirst = i;
+                }
+            }
+            System.out.printf("Påbörja laddning klockan %02d\n", cheapestFirst);
+            System.out.printf( "Medelpris 4h: %.1f öre/kWh\n",cheapestFour/4);
+        }
+
     }
+
 
 
