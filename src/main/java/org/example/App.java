@@ -7,7 +7,6 @@ public class App {
     public Scanner scanner;
     public int[] inData;
 
-
         public static void main (String[]args) {
             App app = new App();
             app.run();
@@ -27,6 +26,7 @@ public class App {
                         "2. Min, Max och Medel\n",
                         "3. Sortera\n",
                         "4. Bästa Laddningstid (4h)\n",
+                        "5. Visualisering\n",
                         "e. Avsluta\n"};
                 for (String menuOption : menu) {
                     System.out.print(menuOption);
@@ -44,6 +44,9 @@ public class App {
                         break;
                     case "4":
                         cheapest();
+                        break;
+                    case "5":
+                        visual();
                         break;
                     case "e":
                         gameOn = false;
@@ -65,7 +68,7 @@ public class App {
         public void minMaxMiddle() {
             int[] minMaxPriceArray = inData;
             int sum = 0;
-            float avaragePrice =0f;
+            float averagePrice;
             int highestPrice = 0;
             int highestPricePosition = 0;
             int lowestPricePosition = 0;
@@ -81,11 +84,11 @@ public class App {
                 }
                 sum = minMaxPriceArray[i] + sum;
             }
-            avaragePrice = ((float) sum /minMaxPriceArray.length);
-            //prinf(%02d -%02d,
+
+            averagePrice = ((float) sum /minMaxPriceArray.length);
             System.out.printf("Lägsta pris: %02d-%02d, %d öre/kWh\n" , lowestPricePosition, (lowestPricePosition + 1), lowestPrice);
             System.out.printf("Högsta pris: %02d-%02d, %d öre/kWh\n" , highestPricePosition, (highestPricePosition+1), highestPrice);
-            System.out.printf("Medelpris: " + "%.2f öre/kWh\n", avaragePrice);
+            System.out.printf("Medelpris: " + "%.2f öre/kWh\n", averagePrice);
         }
         public void sort(){
             int[] sortArray  = new int[inData.length];
@@ -130,7 +133,68 @@ public class App {
             System.out.printf("Påbörja laddning klockan %02d\n", cheapestFirst);
             System.out.printf( "Medelpris 4h: %.1f öre/kWh\n",cheapestFour/4);
         }
-
+        public void visual(){
+            int lowestPrice = Integer.MAX_VALUE;
+            for (int inDatum : inData) {
+                if (lowestPrice > inDatum) {
+                    lowestPrice = inDatum;
+                }
+            }
+            int sixth =530;
+            int fifth = 432;
+            int fourth = 334;
+            int third =  236;
+            int second = 138;
+            int first =40;
+            if (lowestPrice < 0) {
+                sixth = 100;
+                fifth = 77;
+                fourth = 55;
+                third = 32;
+                second = 10;
+                first = -12;
+            }
+        System.out.print(sixth +"|");
+            for (int i = 7; i > 0; i--) {
+                if (i >1) {
+                    for (int inDatum : inData) {
+                        String blank = " ";
+                        if (inDatum >= first && i == 2) {
+                            System.out.print(blank + " x");
+                        } else if (inDatum >= second && i == 3) {
+                            System.out.print(blank + " x");
+                        } else if (inDatum >= third && i == 4) {
+                            System.out.print(blank + " x");
+                        } else if (inDatum >= fourth && i == 5) {
+                            System.out.print(blank + " x");
+                        } else if (inDatum >= fifth && i == 6) {
+                            System.out.print(blank + " x");
+                        } else if (inDatum >= sixth && i == 7) {
+                            System.out.print(blank + " x");
+                        } else {
+                            System.out.print(blank + "  ");
+                        }
+                    }
+                }
+                if(i == 3) {
+                    if (first<0)
+                        System.out.print("\n"+first+"|");
+                    else
+                        System.out.print("\n "+first+"|");
+                }
+                else
+                    System.out.print("\n   |");
+                for (int j = 0; j < inData.length; j++) {
+                    if (i == 2) {
+                        System.out.print("---");
+                    }
+                    if(i == 1) {
+                        System.out.printf(" %02d", j);
+                    }
+                }
+            }
+            System.out.print("\n");
+        }
     }
 
 
