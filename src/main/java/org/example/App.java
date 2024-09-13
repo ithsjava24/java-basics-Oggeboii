@@ -7,9 +7,12 @@ public class App {
     public Scanner scanner;
     public int[] inData;
 
+
         public static void main (String[]args) {
             App app = new App();
             app.run();
+            Locale.setDefault(Locale.of ("sv","SE"));
+
         }
         public App(){
             this.scanner = new Scanner(System.in);
